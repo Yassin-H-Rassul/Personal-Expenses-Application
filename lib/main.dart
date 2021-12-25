@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -166,6 +167,25 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  Widget _buildIOSContent(Widget pageBody, dynamic appBar) {
+    return CupertinoPageScaffold(
+      child: pageBody,
+      navigationBar: appBar,
+    );
+  }
+
+  Widget _buildAndroidContent(Widget pageBody, dynamic appBar) {
+    return Scaffold(
+      appBar: appBar,
+      body: pageBody,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _startAddNewTransaction(context),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -222,19 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return Platform.isIOS
-        ? CupertinoPageScaffold(
-            child: pageBody,
-            navigationBar: appBar,
-          )
-        : Scaffold(
-            appBar: appBar,
-            body: pageBody,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => _startAddNewTransaction(context),
-            ),
-          );
+        ? _buildIOSContent(pageBody, appBar)
+        : _buildAndroidContent(pageBody, appBar);
   }
 }
